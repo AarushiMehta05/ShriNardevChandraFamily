@@ -1,16 +1,22 @@
-
 import React, { useState, useCallback } from "react";
 import family from "./NewData";
+// import "./NewTree.css";
 import "./NewTree.css";
 
 // ── Your icon assets ──
-import BirthdayIcon from "/Birthday.png";
-import KidsIcon from "/Kids.png";
-import PassedAwayIcon from "/PassedAway.png";
-import HeartIcon from "/Heart.png";
-import MarryIcon from "/Marry.png";
-import Home from "/Home.png"
-import Popup from "./Popup";
+// NOTE: these are plain string paths, not imports. Files in /public are
+// served as-is at the root URL, so importing them as JS modules
+// (e.g. `import BirthdayIcon from "/Birthday.png"`) is non-standard and
+// can silently resolve to undefined depending on your bundler (CRA/Vite).
+// Referencing them as strings always works, with zero build config.
+const BirthdayIcon = "/Birthday.png";
+const KidsIcon = "/Kids.png";
+const PassedAwayIcon = "/PassedAway.png";
+const HeartIcon = "/Heart.png";
+const MarryIcon = "/Marry.png";
+const Home = "/Home.png";
+
+import Pop from "./Popup";
 
 // ──────────────────────────────────────────────────────────
 // Helpers
@@ -69,6 +75,7 @@ function findPersonById(root, id) {
 
 // Small reusable icon wrapper so sizing/alignment stays consistent
 function Icon({ src, alt, size = 20, className = "" }) {
+  if (!src) return null;
   return (
     <img
       src={src}
@@ -79,99 +86,72 @@ function Icon({ src, alt, size = 20, className = "" }) {
   );
 }
 
+// Photos live in /public/people, filed under the person's exact name.
+// e.g. person.name === "Eleanor Whitfield" -> /public/people/Eleanor Whitfield.jpg
+const PHOTO_DIR = "/People";
+const PHOTO_EXT = "jpeg"; // change if your files are .png / .jpeg
+
+function photoSrc(name) {
+  return `${PHOTO_DIR}/${encodeURIComponent(name)}.${PHOTO_EXT}`;
+}
+
+function initials(name = "") {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase())
+    .join("");
+}
+
+function NoProfileIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.6"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className="dtc-noprofile-icon"
+    >
+      <circle cx="12" cy="8" r="3.6" />
+      <path d="M4.5 20c1.4-3.8 4.4-5.8 7.5-5.8s6.1 2 7.5 5.8" />
+    </svg>
+  );
+}
+
+function Portrait({ person, ringColor, isDeceased }) {
+  const [broken, setBroken] = useState(false);
+  const src = person.photo || photoSrc(person.name);
+  const showPhoto = !broken;
+
+  return (
+    <div
+      className={`dtc-portrait-wrap${
+        isDeceased ? " " : ""
+      }`}
+    >
+      <div className="dtc-portrait-ring" style={{ borderColor: ringColor }}>
+        {showPhoto ? (
+          <img
+            src={src}
+            alt={person.name}
+            className="dtc-portrait-img"
+            onError={() => setBroken(true)}
+          />
+        ) : (
+          <div className="dtc-portrait-fallback">
+            <NoProfileIcon />
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
 // ──────────────────────────────────────────────────────────
-// Detail modal (bottom sheet on mobile)
-// ──────────────────────────────────────────────────────────
-// function DetailCard({ person }) {
-//   if (!person) return null;
-//   const isDeceased = !!person.dod;
-//   const topColor = nodeTopColor(person);
-//   const anniversary = getAnniversary(person);
-
-//   return (
-//     <div
-//       className={`detail-card ${isDeceased ? "detail-card--deceased" : ""}`}
-//       style={{ borderTopColor: topColor }}
-//     >
-//       <p className="detail-name">{person.name}</p>
-
-//       {person.dob && (
-//         <div className="detail-row">
-//           <span className="detail-label">
-//             <Icon src={BirthdayIcon} alt="Birthday" /> Birthday
-//           </span>
-//           <span className="detail-val">{person.dob}</span>
-//         </div>
-//       )}
-//       {anniversary && (
-//         <div className="detail-row">
-//           <span className="detail-label">
-//             <Icon src={MarryIcon} alt="Anniversary" /> Anniversary
-//           </span>
-//           <span className="detail-val">{anniversary}</span>
-//         </div>
-//       )}
-//       {person.PhoneNo && (
-//         <div className="detail-row">
-//           <span className="detail-label">Phone</span>
-//           <span className="detail-val">{person.PhoneNo}</span>
-//         </div>
-//       )}
-//       {person.CurrentResidence && (
-//         <div className="detail-row">
-//           <span className="detail-label">
-//             <Icon src={Home} alt= "Home" /> Residence
-//             </span>
-//           <span className="detail-val">{person.CurrentResidence}</span>
-//         </div>
-//       )}
-//       {person.dod && (
-//         <div className="detail-row">
-//           <span className="detail-label">
-//             <Icon src={PassedAwayIcon} alt="Passed away" /> Passed Away
-//           </span>
-//           <span className="detail-val">{person.dod}</span>
-//         </div>
-//       )}
-//       {typeof person.children !== "undefined" && (
-//         <div className="detail-row">
-//           <span className="detail-label">
-//             <Icon src={KidsIcon} alt="Children" /> Children
-//           </span>
-//           <span className="detail-val">{person.children?.length || 0}</span>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
-
-// function Modal({ person, onClose }) {
-//   if (!person) return null;
-
-//   return (
-//     <div className="modal-bg" onClick={onClose}>
-//       <div className="modal-sheet" onClick={(e) => e.stopPropagation()}>
-//         <div className="modal-handle" />
-//         <button className="modal-close" onClick={onClose} aria-label="Close">
-//           ✕
-//         </button>
-
-//         <div className="modal-cards">
-//           <DetailCard person={person} />
-
-//           {person.spouse?.name && (
-//             <>
-//               <p className="spouse-label">Spouse</p>
-//               <DetailCard person={person.spouse} />
-//             </>
-//           )}
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-// ──────────────────────────────────────────────────────────
-// Detail modal (bottom sheet on mobile)
+// Detail card
 // ──────────────────────────────────────────────────────────
 function DetailCard({ person }) {
   if (!person) return null;
@@ -179,54 +159,188 @@ function DetailCard({ person }) {
   const topColor = nodeTopColor(person);
 
   return (
-    <div
-      className={`detail-card ${isDeceased ? "detail-card--deceased" : ""}`}
-      style={{ borderTopColor: topColor }}
-    >
-      <p className="detail-name">{person.name}</p>
+    <div className="dtc-wrap">
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Work+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap');
 
-      {person.dob && (
-        <div className="detail-row">
-          <span className="detail-label">
-            <Icon src={BirthdayIcon} alt="Birthday" /> Birthday
-          </span>
-          <span className="detail-val">{person.dob}</span>
-        </div>
-      )}
-      {person.PhoneNo && (
-        <div className="detail-row">
-          <span className="detail-label">Phone</span>
-          <span className="detail-val">{person.PhoneNo}</span>
-        </div>
-      )}
-      {person.CurrentResidence && (
-        <div className="detail-row">
-          <span className="detail-label">
-            <Icon src={Home} alt="Home" /> Residence
-          </span>
-          <span className="detail-val">{person.CurrentResidence}</span>
-        </div>
-      )}
-      {person.dod && (
-        <div className="detail-row">
-          <span className="detail-label">
-            <Icon src={PassedAwayIcon} alt="Passed away" /> Passed Away
-          </span>
-          <span className="detail-val">{person.dod}</span>
-        </div>
-      )}
-      {typeof person.children !== "undefined" && (
-        <div className="detail-row">
-          <span className="detail-label">
-            <Icon src={KidsIcon} alt="Children" /> Children
-          </span>
-          <span className="detail-val">{person.children?.length || 0}</span>
-        </div>
-      )}
+        .dtc-wrap {
+          --paper: #ffffff;
+          --card: #F6F1E4;
+          --ink: #2A2318;
+          --ink-soft: #6E6455;
+          --deceased: #8A8578;
+          --gold: #A9803C;
+          --hairline: rgba(42, 35, 24, 0.12);
+
+          font-family: 'Work Sans', sans-serif;
+          background: var(--paper);
+          padding: 30px 16px 24px;
+          display: flex;
+          justify-content: center;
+          box-sizing: border-box;
+        }
+
+        .detail-card {
+          position: relative;
+          width: 400px;
+          background: var(--card);
+          border: 1px solid var(--hairline);
+          border-top: 3px solid var(--ink);
+          border-radius: 14px;
+          padding: 40px 22px 18px;
+          box-sizing: border-box;
+          text-align: center;
+        }
+
+        .dtc-portrait-wrap {
+          position: absolute;
+          top: -34px;
+          left: 50%;
+          transform: translateX(-50%);
+        }
+
+        .dtc-portrait-ring {
+          width: 68px;
+          height: 68px;
+          border-radius: 50%;
+          border: 2.5px solid var(--gold);
+          background: var(--paper);
+          padding: 3px;
+          box-sizing: border-box;
+          box-shadow: 0 1px 0 rgba(42,35,24,0.06);
+        }
+
+        .dtc-portrait-wrap--deceased .dtc-portrait-ring {
+          border-color: var(--deceased);
+        }
+        .dtc-portrait-wrap--deceased .dtc-portrait-img {
+          filter: grayscale(1) contrast(0.96);
+        }
+
+        .dtc-portrait-img,
+        .dtc-portrait-fallback {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+        }
+
+        .dtc-portrait-fallback {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(169, 128, 60, 0.14);
+          color: var(--gold);
+        }
+
+        .dtc-noprofile-icon {
+          width: 60%;
+          height: 60%;
+        }
+
+        .detail-name {
+          font-family: 'Fraunces', serif;
+          font-weight: 600;
+          font-size: 18px;
+          color: var(--ink);
+          margin: 0 0 12px;
+          letter-spacing: -0.01em;
+        }
+
+        .detail-card--deceased .detail-name {
+          color: var(--ink-soft);
+        }
+
+        .detail-row {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 10px;
+          padding: 8px 0;
+          border-top: 1px solid var(--hairline);
+          text-align: left;
+        }
+        .detail-row:first-of-type { border-top: 1px solid var(--hairline); }
+
+        .detail-label {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          font-size: 12px;
+          color: var(--ink-soft);
+          flex-shrink: 0;
+        }
+
+        .dtc-icon {
+          width: 13px;
+          height: 13px;
+          opacity: 0.75;
+        }
+
+        .detail-val {
+          font-family: 'IBM Plex Mono', monospace;
+          font-size: 12px;
+          color: var(--ink);
+          text-align: right;
+          overflow-wrap: anywhere;
+        }
+      `}</style>
+
+      <div
+        className={`detail-card ${isDeceased ? "detail-card--deceased" : ""}`}
+        style={{ borderTopColor: topColor }}
+      >
+        <Portrait person={person} ringColor={topColor} isDeceased={isDeceased} />
+
+        <p className="detail-name">{person.name}</p>
+
+        {person.dob && (
+          <div className="detail-row">
+            <span className="detail-label">
+              <Icon src={BirthdayIcon} alt="Birthday" size={13} /> Birthday
+            </span>
+            <span className="detail-val">{person.dob}</span>
+          </div>
+        )}
+        {person.PhoneNo && (
+          <div className="detail-row">
+            <span className="detail-label">Phone</span>
+            <span className="detail-val">{person.PhoneNo}</span>
+          </div>
+        )}
+        {person.CurrentResidence && (
+          <div className="detail-row">
+            <span className="detail-label">
+              <Icon src={Home} alt="Home" size={13} /> Residence
+            </span>
+            <span className="detail-val">{person.CurrentResidence}</span>
+          </div>
+        )}
+        {person.dod && (
+          <div className="detail-row">
+            <span className="detail-label">
+              <Icon src={PassedAwayIcon} alt="Passed away" size={13} /> Passed away
+            </span>
+            <span className="detail-val">{person.dod}</span>
+          </div>
+        )}
+        {typeof person.children !== "undefined" && (
+          <div className="detail-row">
+            <span className="detail-label">
+              <Icon src={KidsIcon} alt="Children" size={13} /> Children
+            </span>
+            <span className="detail-val">{person.children?.length || 0}</span>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
+// ──────────────────────────────────────────────────────────
+// Detail modal (bottom sheet on mobile)
+// ──────────────────────────────────────────────────────────
 function Modal({ person, onClose }) {
   if (!person) return null;
   const anniversary = getAnniversary(person);
@@ -291,7 +405,9 @@ function PersonNode({ person, onSelect, collapsed, onToggle }) {
 
         {/* Card */}
         <div
-          className={`person-card-node ${isDeceased ? "person-card-node--deceased" : ""}`}
+          className={`person-card-node ${
+            isDeceased ? "person-card-node--deceased" : ""
+          }`}
           style={{ borderTopColor: topColor }}
           onClick={() => onSelect(person)}
           role="button"
@@ -378,20 +494,19 @@ export default function NewTree() {
     setSelectedPerson(person);
   }, []);
 
-   const handleExpandAll = useCallback(() => {
+  const handleExpandAll = useCallback(() => {
     setCollapsed({});
   }, []);
 
-   const handleCollapseAll = useCallback(() => {
+  const handleCollapseAll = useCallback(() => {
     const ids = getAllParentIds(family);
     const map = {};
     ids.forEach((id) => (map[id] = true));
     setCollapsed(map);
   }, []);
 
-   const memberCount = countAllMembers(family);
+  const memberCount = countAllMembers(family);
   const generationCount = countGenerations(family);
-
 
   return (
     <div className="tree-page">
@@ -439,7 +554,7 @@ export default function NewTree() {
           </div>
         </div>
       </header>
-      <Popup/>
+      <Pop />
 
       <div className="tree-body">
         <PersonNode

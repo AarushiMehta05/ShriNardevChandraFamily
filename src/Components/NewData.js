@@ -53,7 +53,7 @@ const family =
                 },
                 {
                     id: "5",
-                    name: "Anil Datta",
+                    name: "Anil Datta (babbu)",
                     gender: "Female",
                     dob: "07/09/1955",
                     dod: "",
@@ -478,7 +478,7 @@ const family =
         },
         {
             id: "37",
-            name: "Col. V.C Mehta",
+            name: "Col. V.C Mehta (Inder mama)",
             gender: "Male",
             dob: "04/03/1941",
             dod: "06/01/2009",
@@ -486,7 +486,7 @@ const family =
             spouse: {
                 ann: "21/05/1967",
                 id: "38",
-                name: "Nirmal Mehta",
+                name: "Nirmal Mehta (Nimma mami)",
                 gender: "Female",
                 dob: "27/09",
                 dod: "05/10/2020",
@@ -495,7 +495,7 @@ const family =
             children: [
                 {
                     id: "39",
-                    name: "Bhavna Mishra",
+                    name: "Dr. Bhavna Mishra",
                     gender: "Female",
                     dob: "13/11/1969",
                     dod: "",
@@ -512,7 +512,7 @@ const family =
                     children: [
                         {
                             id: "41",
-                            name: "Varnika Mishra",
+                            name: "Dr. Varnika Mishra",
                             gender: "Female",
                             dob: "20/05/2004",
                             dod: "",
@@ -532,7 +532,7 @@ const family =
                 },
                 {
                     id: "42",
-                    name: "Kamna Bakshi",
+                    name: "Dr. Kamna Bakshi",
                     gender: "Female",
                     dob: "27/09/1971",
                     dod: "",
@@ -540,7 +540,7 @@ const family =
                     spouse: {
                         ann: "11/02/1997",
                         id: "43",
-                        name: "Ashwani Bakshi",
+                        name: "Dr. Ashwani Bakshi",
                         gender: "Male",
                         dob: "30/08",
                         dod: "",
@@ -624,7 +624,7 @@ const family =
         },
         {
             id: "49",
-            name: "Kanta Mehta",
+            name: "Chandra Kanta Mehta",
             gender: "Female",
             dob: "20/12/1939",
             dod: "",
@@ -713,7 +713,7 @@ const family =
                         },
                         {
                             id: "57",
-                            name: "Parshasti Bali Bakshi (Mona)",
+                            name: "Prashasti Bali Bakshi (Mona)",
                             gender: "Female",
                             dob: "06/08/1987",
                             dod: "",
@@ -816,7 +816,7 @@ const family =
                         id: "65",
                         name: "Manoj Chibber",
                         gender: "Male",
-                        dob: "25/02/1964",
+                        dob: "25/02/1965",
                         dod: "",
                         CurrentResidence: "Faridabad",
                     },
@@ -863,7 +863,7 @@ const family =
         },
         {
             id: "68",
-            name: "Gp. Capt. Devinder Chander Mehta",
+            name: "Gp. Capt. Devinder Chander Mehta (Billu mama/chacha)",
             gender: "",
             dob: "26/11/1945",
             dod: "12/09/2015",
@@ -974,7 +974,7 @@ const family =
         },
         {
             id: "76",
-            name: "S.R.Mehta",
+            name: "Suman Rekha Mehta (Munni masi-bua)",
             gender: "Female",
             dob: "01/06/1947",
             dod: "19/04/2025",
@@ -982,7 +982,7 @@ const family =
             spouse: {
                 ann: "02/12/1969",
                 id: "77",
-                name: "Col. R.S. Mehta",
+                name: "Col. Ranbir Singh Mehta",
                 gender: "Male",
                 dob: "21/12/1939",
                 dod: "02/01/2000",
@@ -999,7 +999,7 @@ const family =
                     spouse: {
                         ann: "20/02/1995",
                         id: "79",
-                        name: "Mukesh Mehta",
+                        name: "Mukesh Mehta (Mickey)",
                         gender: "Male",
                         dob: "24/03/1965",
                         dod: "31/03/2010",
@@ -1008,7 +1008,7 @@ const family =
                     children: [
                         {
                             id: "80",
-                            name: "Tanya Kapur",
+                            name: "Tanya Kapur (Minna)",
                             gender: "Female",
                             dob: "21/04/1996",
                             dod: "",
@@ -1045,7 +1045,7 @@ const family =
                         },
                         {
                             id: "83",
-                            name: "Meghna Mehta",
+                            name: "Meghna Mehta (Mithoo)",
                             gender: "Female",
                             dob: "29/01/2000",
                             dod: "",
@@ -1073,7 +1073,7 @@ const family =
                     spouse: {
                         ann: "21/06/1997",
                         id: "84",
-                        name: "Anamika Mehta",
+                        name: "Anamika Mehta (Nami)",
                         gender: "Female",
                         dob: "02/09/1973",
                         dod: "",
@@ -1082,7 +1082,7 @@ const family =
                     children: [
                         {
                             id: "85",
-                            name: "Natasha Mehta",
+                            name: "Natasha Mehta (Nikki)",
                             gender: "Female",
                             dob: "14/07/2003",
                             dod: "",
