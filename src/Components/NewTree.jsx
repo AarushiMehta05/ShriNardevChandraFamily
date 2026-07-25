@@ -157,6 +157,12 @@ function DetailCard({ person }) {
   if (!person) return null;
   const isDeceased = !!person.dod;
   const topColor = nodeTopColor(person);
+  const [lightboxOpen, setLightboxOpen] = React.useState(false);
+  const [lightboxBroken, setLightboxBroken] = React.useState(false);
+
+  // Same source logic as Portrait, so the lightbox always shows
+  // exactly the same photo the small circle is showing.
+  const lightboxSrc = person.photo || photoSrc(person.name);
 
   return (
     <div className="dtc-wrap">
@@ -197,6 +203,14 @@ function DetailCard({ person }) {
           top: -34px;
           left: 50%;
           transform: translateX(-50%);
+          cursor: pointer;
+          transition: transform 0.15s ease;
+        }
+        .dtc-portrait-wrap:hover {
+          transform: translateX(-50%) scale(1.05);
+        }
+        .dtc-portrait-wrap:active {
+          transform: translateX(-50%) scale(0.96);
         }
 
         .dtc-portrait-ring {
@@ -285,13 +299,113 @@ function DetailCard({ person }) {
           text-align: right;
           overflow-wrap: anywhere;
         }
+
+        /* ---------- Lightbox ---------- */
+        .dtc-lightbox-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(20, 16, 10, 0.92);
+          backdrop-filter: blur(6px);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 1000;
+          animation: dtc-fade-in 0.2s ease;
+        }
+        @keyframes dtc-fade-in {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+
+        .dtc-lightbox-content {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          animation: dtc-scale-in 0.22s cubic-bezier(0.2, 0.8, 0.3, 1);
+        }
+        @keyframes dtc-scale-in {
+          from { transform: scale(0.85); opacity: 0; }
+          to { transform: scale(1); opacity: 1; }
+        }
+
+        .dtc-lightbox-ring {
+          width: min(80vw, 380px);
+          height: min(80vw, 380px);
+          border-radius: 50%;
+          border: 3px solid var(--gold);
+          background: var(--paper);
+          padding: 6px;
+          box-sizing: border-box;
+          box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .dtc-lightbox-ring--deceased {
+          border-color: var(--deceased);
+        }
+        .dtc-lightbox-img--deceased {
+          filter: grayscale(1) contrast(0.96);
+        }
+
+        .dtc-lightbox-img,
+        .dtc-lightbox-fallback {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+          object-fit: cover;
+          display: block;
+        }
+        .dtc-lightbox-fallback {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: rgba(169, 128, 60, 0.14);
+          color: var(--gold);
+        }
+
+        .dtc-lightbox-name {
+          font-family: 'Fraunces', serif;
+          font-weight: 600;
+          font-size: 20px;
+          color: #F6F1E4;
+          margin-top: 20px;
+          text-align: center;
+        }
+
+        .dtc-lightbox-close {
+          position: absolute;
+          top: -46px;
+          right: -4px;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+          border: none;
+          background: rgba(255,255,255,0.12);
+          color: #F6F1E4;
+          font-size: 18px;
+          line-height: 1;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.15s ease;
+        }
+        .dtc-lightbox-close:hover {
+          background: rgba(255,255,255,0.22);
+        }
       `}</style>
 
       <div
         className={`detail-card ${isDeceased ? "detail-card--deceased" : ""}`}
         style={{ borderTopColor: topColor }}
       >
-        <Portrait person={person} ringColor={topColor} isDeceased={isDeceased} />
+        <div
+          onClick={() => {
+            setLightboxBroken(false);
+            setLightboxOpen(true);
+          }}
+        >
+          <Portrait person={person} ringColor={topColor} isDeceased={isDeceased} />
+        </div>
 
         <p className="detail-name">{person.name}</p>
 
@@ -334,6 +448,49 @@ function DetailCard({ person }) {
           </div>
         )}
       </div>
+
+      {lightboxOpen && (
+        <div
+          className="dtc-lightbox-overlay"
+          onClick={() => setLightboxOpen(false)}
+        >
+          <div
+            className="dtc-lightbox-content"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="dtc-lightbox-close"
+              onClick={() => setLightboxOpen(false)}
+              aria-label="Close"
+            >
+              ✕
+            </button>
+
+            <div
+              className={`dtc-lightbox-ring ${
+                isDeceased ? "dtc-lightbox-ring--deceased" : ""
+              }`}
+            >
+              {!lightboxBroken ? (
+                <img
+                  src={lightboxSrc}
+                  alt={person.name}
+                  className={`dtc-lightbox-img ${
+                    isDeceased ? "" : ""
+                  }`}
+                  onError={() => setLightboxBroken(true)}
+                />
+              ) : (
+                <div className="dtc-lightbox-fallback">
+                  <NoProfileIcon />
+                </div>
+              )}
+            </div>
+
+            <p className="dtc-lightbox-name">{person.name}</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -335,7 +335,7 @@ const family =
                     dod: "",
                     CurrentResidence: "USA",
                     spouse: {
-                        ann: "04/11/",
+                        ann: "04/11",
                         id: "28",
                         name: "Raju Tharimana",
                         gender: "Male",
@@ -349,7 +349,7 @@ const family =
                             id: "29",
                             name: "Anushka Tharimana (Twinky)",
                             gender: "Female",
-                            dob: "25/07",
+                            dob: "25/07/2011",
                             dod: "",
                             CurrentResidence: "USA",
                             spouse: {
@@ -400,7 +400,7 @@ const family =
                             },
                             children: [{
                                 id: "32",
-                                name: "Hayden Arora",
+                                name: "Hayden Riaan Arora",
                                 gender: "Male",
                                 dob: "27/08/2017",
                                 dod: "",
