@@ -17,6 +17,7 @@ const MarryIcon = "/Marry.png";
 const Home = "/Home.png";
 
 import Pop from "./Popup";
+import TreeHeader from "./TreeHeader";
 
 // ──────────────────────────────────────────────────────────
 // Helpers
@@ -667,50 +668,12 @@ export default function NewTree() {
 
   return (
     <div className="tree-page">
-      <header className="tree-header">
-        <div className="tree-header-top">
-          <div>
-            <div className="tree-title-row">
-              <i className="ti ti-git-fork tree-title-icon" aria-hidden="true" />
-              <h1 className="tree-title">Family tree</h1>
-            </div>
-            <p className="tree-subtitle">
-              Tap a name for details · use the arrows to collapse a branch
-            </p>
-          </div>
-
-          <div className="tree-header-actions">
-            <button className="tree-action-btn" onClick={handleExpandAll}>
-              <i className="ti ti-chevrons-down" aria-hidden="true" />
-              Expand all
-            </button>
-            <button className="tree-action-btn" onClick={handleCollapseAll}>
-              <i className="ti ti-chevrons-up" aria-hidden="true" />
-              Collapse all
-            </button>
-          </div>
-        </div>
-
-        <div className="tree-header-bottom">
-          <div className="legend-item">
-            <span className="legend-dot legend-dot--male" />
-            <span>Male</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-dot legend-dot--female" />
-            <span>Female</span>
-          </div>
-          <div className="legend-item">
-            <span className="legend-dot legend-dot--deceased" />
-            <span>Deceased</span>
-          </div>
-          <div className="legend-divider" />
-          <div className="tree-stats">
-            <span>{memberCount} members</span>
-            <span>{generationCount} generations</span>
-          </div>
-        </div>
-      </header>
+      <TreeHeader
+  onExpandAll={handleExpandAll}
+  onCollapseAll={handleCollapseAll}
+  memberCount={memberCount}
+  generationCount={generationCount}
+/>
       <Pop />
 
       <div className="tree-body">

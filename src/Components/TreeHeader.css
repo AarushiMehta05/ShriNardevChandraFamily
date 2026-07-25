@@ -1,0 +1,270 @@
+.tree-header {
+  --paper: #fbf7ef;
+  --paper-deep: #f1e9da;
+  --ink: #362a21;
+  --ink-soft: rgba(54, 42, 33, 0.62);
+  --ink-faint: rgba(54, 42, 33, 0.14);
+  --gold: #b8874a;
+  --gold-soft: rgba(184, 135, 74, 0.35);
+  --sage: #7e8b68;
+  --male: #5b7c99;
+  --female: #c17c93;
+  --deceased: #a69c8e;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  position: relative;
+  background:
+    radial-gradient(circle at 85% -10%, rgba(184, 135, 74, 0.1), transparent 55%),
+    linear-gradient(180deg, var(--paper) 0%, var(--paper-deep) 100%);
+  border: 1px solid var(--ink-faint);
+  border-radius: 20px;
+  padding: 28px 32px 20px;
+  box-shadow: 0 1px 2px rgba(54, 42, 33, 0.04), 0 12px 32px -20px rgba(54, 42, 33, 0.35);
+  overflow: hidden;
+  font-family: var(--font-body);
+}
+
+/* faint paper grain, so the panel reads as a keepsake page rather than a UI card */
+.tree-header::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/%3E%3C/svg%3E");
+  opacity: 0.035;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.tree-header-top {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.title-cluster {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+/* --- signature element: the logo sits in a locket, like a keepsake photo, not a logo lockup --- */
+.locket {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--paper);
+  animation: tree-pulse-glow 4.5s ease-in-out infinite;
+}
+.locket::before {
+  content: "";
+  position: absolute;
+  inset: -5px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-soft);
+}
+.locket::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--gold);
+}
+.locket img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  filter: sepia(12%) saturate(105%);
+}
+.locket-fallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(160deg, #efe6d3, #e2d6ba);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 20px;
+  color: var(--gold);
+  letter-spacing: 0.5px;
+}
+
+@keyframes tree-pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 6px rgba(184, 135, 74, 0.07), 0 4px 14px rgba(54, 42, 33, 0.16); }
+  50% { box-shadow: 0 0 0 10px rgba(184, 135, 74, 0.13), 0 4px 18px rgba(54, 42, 33, 0.2); }
+}
+
+.eyebrow {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 2px;
+}
+
+.tree-title {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-size: 30px;
+  line-height: 1.05;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.tree-subtitle {
+  margin: 5px 0 0;
+  font-size: 13.5px;
+  color: var(--ink-soft);
+}
+
+.flourish {
+  display: block;
+  margin-top: 6px;
+  height: 14px;
+  width: 130px;
+}
+.flourish path {
+  fill: none;
+  stroke: var(--sage);
+  stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  animation: tree-draw 1.3s ease forwards 0.35s;
+}
+.flourish circle {
+  fill: var(--gold);
+  opacity: 0;
+  animation: tree-leaf-in 0.5s ease forwards 1.1s;
+}
+@keyframes tree-draw { to { stroke-dashoffset: 0; } }
+@keyframes tree-leaf-in { to { opacity: 0.8; } }
+
+.tree-header-actions {
+  display: flex;
+  gap: 10px;
+  flex: none;
+  padding-top: 2px;
+}
+
+.tree-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--ink-faint);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+}
+.tree-action-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.tree-action-btn:hover {
+  background: rgba(184, 135, 74, 0.1);
+  border-color: var(--gold-soft);
+}
+.tree-action-btn:active {
+  transform: scale(0.97);
+}
+.tree-action-btn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.tree-divider {
+  position: relative;
+  margin: 20px 0 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--ink-faint) 15%, var(--ink-faint) 85%, transparent);
+}
+
+.tree-header-bottom {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  font-size: 12.5px;
+  color: var(--ink-soft);
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  opacity: 0.9;
+}
+.legend-dot--male { background: var(--male); box-shadow: 0 0 0 3px rgba(91, 124, 153, 0.16); }
+.legend-dot--female { background: var(--female); box-shadow: 0 0 0 3px rgba(193, 124, 147, 0.16); }
+.legend-dot--deceased { background: var(--deceased); box-shadow: 0 0 0 3px rgba(166, 156, 142, 0.16); }
+
+.legend-divider {
+  width: 1px;
+  height: 16px;
+  background: var(--ink-faint);
+}
+
+.tree-stats {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+.tree-stats span:not(:last-child)::after {
+  content: "·";
+  margin-left: 8px;
+  color: var(--gold);
+}
+
+@media (max-width: 640px) {
+  .tree-header-top {
+    flex-direction: column;
+  }
+  .tree-header-actions {
+    align-self: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .locket,
+  .flourish path,
+  .flourish circle {
+    animation: none !important;
+  }
+  .flourish path {
+    stroke-dashoffset: 0;
+  }
+  .flourish circle {
+    opacity: 0.8;
+  }
+}
