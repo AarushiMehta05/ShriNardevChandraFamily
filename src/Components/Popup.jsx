@@ -7,7 +7,8 @@ import "./Popup.css";
 function parseDMY(str) {
   if (!str) return null;
   const parts = str.split("/");
-  if (parts.length !== 3) return null;
+  // accept both "dd/mm" and "dd/mm/yyyy" — only day & month are used anyway
+  if (parts.length !== 2 && parts.length !== 3) return null;
   const day = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10);
   if (Number.isNaN(day) || Number.isNaN(month)) return null;
@@ -158,7 +159,7 @@ function OccasionCard({ event, onClose }) {
   return null;
 }
 
-export default function Popup() {
+export default function Pop() {
   const [dismissed, setDismissed] = useState(() => new Set());
 
   const target = useMemo(() => {
