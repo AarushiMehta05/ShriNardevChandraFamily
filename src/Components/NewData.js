@@ -478,7 +478,7 @@ const family =
         },
         {
             id: "37",
-            name: "Col. V.C Mehta (Inder mama)",
+            name: "Col.V.C Mehta (Inder mama)",
             gender: "Male",
             dob: "04/03/1941",
             dod: "06/01/2009",
@@ -863,7 +863,7 @@ const family =
         },
         {
             id: "68",
-            name: "Gp. Capt. Devinder Chander Mehta (Billu mama/chacha)",
+            name: "Gp. Capt. Devinder Chander Mehta (Billu mama-chacha)",
             gender: "",
             dob: "26/11/1945",
             dod: "12/09/2015",
