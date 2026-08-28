@@ -651,7 +651,7 @@ const family =
                         id: "52",
                         name: "Kundaleep Bali (Dimpy)",
                         gender: "Male",
-                        dob: "22/10",
+                        dob: "22/10/1959",
                         dod: "",
                         CurrentResidence: "Noida",
                     },
