@@ -542,7 +542,7 @@ const family =
                         id: "43",
                         name: "Dr. Ashwani Bakshi",
                         gender: "Male",
-                        dob: "30/08",
+                        dob: "29/08",
                         dod: "",
                         CurrentResidence: "Faridabad",
                     },
